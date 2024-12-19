@@ -1,0 +1,30 @@
+<div class="login-container d-flex justify-content-center align-items-center vh-100">
+  <div class="card" style="width: 100%; max-width: 500px;">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">Iniciar Sesión</h2>
+
+      <form (submit)="onSubmit()">
+        <div class="mb-3 row">
+          <label for="nombreUsuario" class="col-sm-4 col-form-label">Usuario:</label>
+          <div class="col-sm-8">
+            <input type="text" id="nombreUsuario" [(ngModel)]="nombreUsuario" name="nombreUsuario" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="contrasena" class="col-sm-4 col-form-label">Contraseña:</label>
+          <div class="col-sm-8">
+            <input type="password" id="contrasena" [(ngModel)]="contrasena" name="contrasena" class="form-control" required>
+          </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+          {{ errorMessage }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+      </form>
+    </div>
+  </div>
+</div>
+

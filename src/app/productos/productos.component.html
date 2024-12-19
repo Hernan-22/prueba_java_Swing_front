@@ -1,0 +1,136 @@
+<!-- src/app/productos/productos.component.html -->
+<div class="productos-container container mt-5">
+  <h2 class="text-center mb-4">Productos</h2>
+
+  <!-- Lista de productos -->
+  <div class="productos-container">
+
+    <!-- Tabla de productos con estilo de Bootstrap -->
+    <table class="table table-striped mt-4">
+      <thead>
+        <tr>
+          <th scope="col">Código</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Familia</th>
+          <th scope="col">Precio</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of productos"
+          class="table-row"
+          (click)="seleccionarProducto(producto)">
+          <td>{{ producto.idProducto }}</td>
+          <td>{{ producto.nombreProducto }}</td>
+          <td>{{ producto.productosFamilias.nombreFamilia }}</td>
+          <td>{{ producto.precio | currency }}</td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal para Crear/Editar Producto -->
+  <div class="modal fade" id="productoModal" tabindex="-1"
+    aria-labelledby="productoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productoModalLabel">{{ editMode ?
+            'Editar Producto' : 'Nuevo Producto' }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario de producto -->
+          <form>
+            <div class="mb-3">
+              <label for="idProducto" class="form-label">Código:</label>
+              <input
+                type="number"
+                id="idProducto"
+                [(ngModel)]="nuevoProducto.idProducto"
+                name="idProducto"
+                class="form-control"
+                placeholder="Ingrese Código"
+                required
+                min="1"
+                [disabled]="editMode"
+              />
+              <div *ngIf="(submitted && (!nuevoProducto.idProducto || nuevoProducto.idProducto <= 0))" class="error-message">
+                El código es requerido y debe ser mayor que 0.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="nombreProducto" class="form-label">Nombre del Producto:</label>
+              <input
+                type="text"
+                id="nombreProducto"
+                [(ngModel)]="nuevoProducto.nombreProducto"
+                name="nombreProducto"
+                class="form-control"
+                placeholder="Ingrese el nombre del producto"
+                required
+              />
+              <div *ngIf="submitted && !nuevoProducto.nombreProducto" class="error-message">
+                El nombre del producto es requerido.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="precioProducto" class="form-label">Precio:</label>
+              <input
+                type="number"
+                class="form-control"
+                id="precioProducto"
+                [(ngModel)]="nuevoProducto.precio"
+                name="precioProducto"
+                step="0.01"
+                min="0"
+                placeholder="Ingrese el precio"
+                required
+              />
+              <div *ngIf="submitted && (!nuevoProducto.precio || nuevoProducto.precio <= 0)" class="error-message">
+                El precio es requerido y debe ser mayor que 0.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="familiaProducto" class="form-label">Familia:</label>
+              <select
+                class="form-select"
+                id="familiaProducto"
+                [(ngModel)]="nuevoProducto.productosFamilias.idFamilia"
+                name="productosFamilias"
+                required
+              >
+                <option value="0" disabled>Seleccione una familia</option>
+                <option *ngFor="let familia of familias" [value]="familia.idFamilia">{{ familia.nombreFamilia }}</option>
+              </select>
+              <div *ngIf="submitted && nuevoProducto.productosFamilias.idFamilia == 0" class="error-message">
+                Debes seleccionar una familia.
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+            data-bs-dismiss="modal" (click)="closeModal()">Cerrar</button>
+          <button type="button" class="btn btn-primary"
+            (click)="editMode ? actualizarProducto() : agregarProducto()">{{
+            editMode ? 'Actualizar' : 'Guardar' }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones de Acción -->
+  <div *ngIf="!formVisible">
+    <button class="btn btn-success" (click)="abrirModal()">Nuevo</button>
+    <button class="btn btn-info" (click)="mostrarModalEditar()"
+      [disabled]="!selectedProducto">Editar</button>
+    <button class="btn btn-danger" (click)="eliminarProductoo()"
+      [disabled]="!selectedProducto">Borrar</button>
+  </div>
+
+</div>
